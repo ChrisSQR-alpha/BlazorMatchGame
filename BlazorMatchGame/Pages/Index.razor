@@ -25,6 +25,10 @@
                 </div>
             }
     </div>
+    <!-- 加入一個 row 顯示目前找到幾對 -->
+    <div class="row">
+        <h2>Matches found: @matchesFound</h2>
+    </div>
 </div>
 
 @code{
@@ -41,6 +45,7 @@
     };
 
     List<string> shuffledAnimals = new List<string>();
+    int matchesFound = 0; //加入紀錄找到對子的變數
 
     protected override void OnInitialized()
     {
@@ -53,6 +58,7 @@
         shuffledAnimals = animalEmoji
           .OrderBy(item => random.Next())
           .ToList();
+        matchesFound = 0;//設定遊戲時，找到的對數都設為0
     }
 
     string lastAnimalFound = string.Empty;
@@ -77,6 +83,12 @@
             shuffledAnimals = shuffledAnimals
                 .Select(a => a.Replace(animal, string.Empty))
                 .ToList();
+            //增加找到對子數，檢查找到對子數是不是達到上限，是的話就重設遊戲
+            matchesFound++;
+            if (matchesFound == 8)
+            {
+                SetUpGame();
+            }
         }
         else
         {
